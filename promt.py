@@ -1,6 +1,7 @@
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import ChatOllama 
 from dotenv import load_dotenv
+from langchain_core.output_parsers import StrOutputParser
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,9 +27,11 @@ In 2010,[citation needed] for the first time, Mas indicated he would vote "Yes" 
         template=summary_template,
     )
 
-    llm = ChatOllama(model="llama3.2:latest", temperature=0.0) 
+    llm = ChatOllama(model="mistral", temperature=0.0) 
 
-    chain = summary_prompt_template | llm
+    # Create a chain that combines the prompt template with the LLM and an output parser
+    chain = summary_prompt_template | llm | StrOutputParser()
+
 
     response = chain.invoke(input={"information": information})
 
