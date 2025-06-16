@@ -40,12 +40,12 @@ def ice_break_with(name: str) -> Tuple[Summary, str]:
     chain = summary_prompt_template | llm | summary_parser
 
 
-    name = "Eden Marco"
+    # name = "Eden Marco"
     linkedin_url = lookup(name=name)
 
     linkedin_data = scrape_linkedin_profile(
         linkedin_profile_url=linkedin_url,
-        mock=True,  # Set to True to use mock data for testing
+        mock=False,  # Set to True to use mock data for testing
     )
 
     # This "":Summary" is just a type hint    
@@ -57,7 +57,7 @@ def ice_break_with(name: str) -> Tuple[Summary, str]:
 if __name__ == "__main__":
     print("Hello LangChain.")
 
-    name = "Eden Marco"
+    name = "Ulises Rey"
     summary, photo_url = ice_break_with(name=name)
     print(summary)
     print(f"Photo URL: {photo_url}")
