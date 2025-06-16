@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def scrape_linkedin_profile(profile_url: str, mock: bool =False):   
+def scrape_linkedin_profile(linkedin_profile_url: str, mock: bool = False):   
     """
     Scrapes a LinkedIn profile for the name, headline, and summary.
     
@@ -22,6 +22,7 @@ def scrape_linkedin_profile(profile_url: str, mock: bool =False):
         response = requests.get(linkedin_profile_url, timeout=10)
         
     else:
+        # Alternatively there is ProxyCurl, which is cheaper (See Chapter 17)
         api_endpoint = "https://api.scrapin.io/enrichment/profile"
         # Dictionary keys need to be exactly those
         params = {"apikey" : os.getenv("SCRAPIN_API_KEY"),
@@ -30,6 +31,14 @@ def scrape_linkedin_profile(profile_url: str, mock: bool =False):
         response = requests.get(api_endpoint, params=params, timeout=10)
 
     data = response.json().get("person")
+
+    # Cleans a bit our data
+    data = {
+        k:v
+        for k, v in data.items()
+        if v not in ([], "", "", None) and k not in ["certifications"]
+    }
+    
 
     return data
 
