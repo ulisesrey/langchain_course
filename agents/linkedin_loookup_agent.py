@@ -26,7 +26,7 @@ def lookup(name: str) -> str:
 
     template = """
     Given the name {name}, find the LinkedIn profile URL of the person.
-    The answer should contain only the URL.
+    The answer should contain only the URL. Use the tools available.
     """
 
     prompt_template = PromptTemplate(template=template, input_variables=["name"])
