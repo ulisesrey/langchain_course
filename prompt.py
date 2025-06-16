@@ -45,18 +45,19 @@ def ice_break_with(name: str) -> Tuple[Summary, str]:
 
     linkedin_data = scrape_linkedin_profile(
         linkedin_profile_url=linkedin_url,
-        mock=False,  # Set to True to use mock data for testing
+        mock=True,  # Set to True to use mock data for testing
     )
 
+    # This "":Summary" is just a type hint    
+    response: Summary = chain.invoke(input={"information": linkedin_data})
 
-    response:Summary = chain.invoke(input={"information": linkedin_data})
-
-    return response, 
+    return response, linkedin_data.get("photo_url", "")
 
 
 if __name__ == "__main__":
     print("Hello LangChain.")
 
     name = "Eden Marco"
-    summary = ice_break_with(name=name)
+    summary, photo_url = ice_break_with(name=name)
     print(summary)
+    print(f"Photo URL: {photo_url}")
