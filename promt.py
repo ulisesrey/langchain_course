@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 from third_parties.linkedin import scrape_linkedin_profile
 from agents.linkedin_loookup_agent import lookup
+from parsers.output_parsers import summary_parser
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -27,17 +29,24 @@ if __name__ == "__main__":
     summary_template = """
     Given the information {information} about a person, I want you to create:
     1. A short summary
-    2. two interesting facts about the person"""
-
+    2. two interesting facts about the person
+    
+    Use information from Linkedin.
+    \n{format_instructions}
+    """
+    
+    
     summary_prompt_template = PromptTemplate(
         input_variables="information",
         template=summary_template,
+        partial_variables={"format_instructions": summary_parser.get_format_instructions()},
     )
 
     llm = ChatOllama(model="mistral", temperature=0.0) 
 
     # Create a chain that combines the prompt template with the LLM and an output parser
-    chain = summary_prompt_template | llm | StrOutputParser()
+    chain = summary_prompt_template | llm | summary_parser
+
 
     name = "Eden Marco"
     linkedin_url = lookup(name=name)
